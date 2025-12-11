@@ -32,6 +32,7 @@
     "typescript": "^5.9.2"
   },
   "dependencies": {
+    "date-fns": "^2.30.0",
     "@azure/storage-blob": "^12.28.0",
     "@prisma/client": "^6.16.2",
     "axios": "^1.11.0",

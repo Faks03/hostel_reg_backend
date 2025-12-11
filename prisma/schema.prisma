@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Student {
+  id            Int                 @id @default(autoincrement())
+  matricNumber  String              @unique
+  firstname     String
+  lastname      String
+  level         Int
+  department    String
+  email         String              @unique
+  phone         String?
+  address       String?
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  allocation    Allocation?
+  documents     Document[]
+  registration  HostelRegistration?
+  notifications Notification[]
+}
+
+model HostelRegistration {
+  id                       Int      @id @default(autoincrement())
+  studentId                Int      @unique
+  preferredBlock           String?
+  specialRequests          String?
+  emergencyContactName     String
+  emergencyContactPhone    String
+  emergencyContactRelation String?
+  status                   String   @default("draft")
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+  student                  Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+model Admin {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  role      String
+  createdAt DateTime @default(now())
+}
+
+model Room {
+  id          Int          @id @default(autoincrement())
+  block       String
+  roomNumber  String
+  capacity    Int
+  createdAt   DateTime     @default(now())
+  allocations Allocation[]
+
+  @@unique([block, roomNumber])
+}
+
+model Allocation {
+  id          Int      @id @default(autoincrement())
+  studentId   Int      @unique
+  roomId      Int
+  allocatedAt DateTime @default(now())
+  room        Room     @relation(fields: [roomId], references: [id])
+  student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+model Document {
+  id         Int      @id @default(autoincrement())
+  studentId  Int
+  type       String
+  fileName   String
+  mimeType   String
+  fileSize   Int
+  fileUrl    String
+  status     String   @default("pending")
+  uploadedAt DateTime @default(now())
+  student    Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  title     String
+  message   String
+  type      String
+  createdAt DateTime @default(now())
+  isRead    Boolean  @default(false)
+  studentId Int
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}

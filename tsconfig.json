@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "CommonJS",
+    "lib": ["ES2020", "dom", "dom.iterable", "esnext"],
+    "outDir": "dist",
+    "rootDir": "src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "types": ["node", "express"],
+    "typeRoots": ["./node_modules/@types", "./src/types"],
+    "ignoreDeprecations": "6.0"
+  },
+  "include": ["src", "src/types/express.d.ts"],
+  "exclude": ["node_modules", "dist"]
+}
